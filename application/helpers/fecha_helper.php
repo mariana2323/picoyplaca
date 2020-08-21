@@ -12,10 +12,9 @@ if (!function_exists('h_nombre_dia_fecha'))
 
   function h_nombre_dia_fecha($fecha)
   {
-    $dias = array('Sunday/Domingo', 'Monday/Lunes', 'Tuesday/Martes', 'Wednesday/Miércoles', 'Thursday/Jueves', 'Friday/Viernes', 'Saturday/Sábado');
     $dd = explode('-', $fecha);
     $ts = mktime(0, 0, 0, $dd[1], $dd[2], $dd[0]);
-    $diafecha = $dias[date('w', $ts)];
+    $diafecha = h_nombre_dia(date('w', $ts));
     return $diafecha;
   }
 }
@@ -27,5 +26,15 @@ if (!function_exists('h_dia_fecha'))
     $dd = explode('-', $fecha);
     $ts = mktime(0, 0, 0, $dd[1], $dd[2], $dd[0]);
     return date('w', $ts);
+  }
+}
+if (!function_exists('h_nombre_dia'))
+{
+
+  function h_nombre_dia($dia)
+  {
+    $dias = array('Sunday/Domingo', 'Monday/Lunes', 'Tuesday/Martes', 'Wednesday/Miércoles', 'Thursday/Jueves', 'Friday/Viernes', 'Saturday/Sábado');
+    $diafecha = $dias[$dia];
+    return $diafecha;
   }
 }
