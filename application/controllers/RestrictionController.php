@@ -10,18 +10,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class RestrictionController extends CI_Controller
 {
+  public function __construct()
+  {
+    parent::__construct();
+  }
+
   public function index()
   {
     $this->load->view('restriction_view');
   }
+
   public function calculateRestriction()
   {
     $data = $this->input->get();
     $placa = $data["plate"];
-    $fecha = $data["datea"];
-    $hora = $data["timea"];
-    $fecha = date('Y-m-d', strtotime($fecha));
-    $hora = date('H:i', strtotime($hora));
+    $fecha = date('Y-m-d', strtotime($data["datea"]));
+    $hora = date('H:i', strtotime($data["timea"]));
     $fecha1 = date('Y-m-d', strtotime('2010-04-28'));
     $fecha2 = date('Y-m-d', strtotime('2019-07-31'));
     $fecha3 = date('Y-m-d', strtotime('2020-03-28'));
@@ -30,9 +34,9 @@ class RestrictionController extends CI_Controller
     $dia = h_dia_fecha($fecha);
     $digito = substr($placa, -1);
     $result = "";
-    if ($fecha <= $fecha1)
+    if ($fecha < $fecha1)
     {
-      return 'There was not "Pico y Placa" at that period/No existió Pico y Placa en esa fecha.';
+      $result = 'There was not "Pico y Placa" at that period/ No existió Pico y Placa en esa fecha.';
     }
     //1. Identify the period/ Identificar el periodo
     //Since April 28, 2010 "Pico y Placa" started/ Desde el 28 de abril del 2010 el Pico y Placa comenzó
@@ -41,15 +45,15 @@ class RestrictionController extends CI_Controller
     //
     elseif ($fecha >= $fecha1 && $fecha < $fecha2)
     {
-      $verifica = $this->testPicoPlacaInicial($digito, $dia, $hora);
+      $verifica = h_test_pico_placa_inicial($digito, $dia, $hora);
       if ($verifica)
       {
-        $result= "You can circulate the date: / Usted si puede salir el día: " . $fecha . " at: / a las: " . $hora;
+        $result = "You can circulate the date: / Usted si puede salir el día: " . $fecha . " at: / a las: " . $hora;
       }
       else
       {
-        $diano = $this->getPicoPlacaInicial($digito);
-        $result= "Remember, you can not circulate on: / Recuerda, no puedes circular el día: " . h_nombre_dia($diano) . " at: / a las: " . $hora;
+        $diano = h_get_pico_placa_inicial($digito);
+        $result = "Remember, you can not circulate on: / Recuerda, no puedes circular el día: " . h_nombre_dia($diano) . " at: / a las: " . $hora;
       }
     }
     //In July 31, 2019 "Pico y Placa" changed it´s name to "Hoy no circula"
@@ -61,12 +65,12 @@ class RestrictionController extends CI_Controller
       $verifica = $this->testHoyNoCircula($digito, $dia, $hora);
       if ($verifica)
       {
-        $result= "You can circulate the date: / Usted si puede salir el día: " . $fecha . " at: / a las: " . $hora;
+        $result = "You can circulate the date: / Usted si puede salir el día: " . $fecha . " at: / a las: " . $hora;
       }
       else
       {
-        $diano = $this->getPicoPlacaInicial($digito);
-        $result= "Remember, you can not circulate on: / Recuerda, no puedes circular el día: " . h_nombre_dia($diano) . " at: / a las: " . $hora;
+        $diano = h_get_pico_placa_inicial($digito);
+        $result = "Remember, you can not circulate on: / Recuerda, no puedes circular el día: " . h_nombre_dia($diano) . " at: / a las: " . $hora;
       }
     }
     //Due the COVID-19 pandemic, "Hoy no circula" changed as a Vehicular Restriction in March 28, 2020/ Debido a la pandemia de Covid-19, el "Hoy no circula" cambió a una restricción vehicular desde el 28 de marzo del 2020
@@ -78,12 +82,11 @@ class RestrictionController extends CI_Controller
       $verifica = $this->testVehicularRestriction1($digito, $dia, $hora);
       if ($verifica)
       {
-        $result= "You can circulate the date: / Usted si puede salir el día: " . $fecha . " at: / a las: " . $hora;
+        $result = "You can circulate the date: / Usted si puede salir el día: " . $fecha . " at: / a las: " . $hora;
       }
       else
       {
-        //$diano = $this->getPicoPlacaInicial($digito);
-        $result= "Remember, you can circulate on: / Recuerda, puedes circular los días: ... at: / a las: " . $hora;
+        $result = "Remember, you can not circulate on: / Recuerda, no puedes circular el día: ".$fecha." at: / a las: " . $hora;
       }
     }
     //Due the Covid-19 pandemic, vehicular restriction changed in April 6, 2020/ Debido a la pandemia de Covid-19, la restricción cambió el 6 de abril del 2020
@@ -95,12 +98,12 @@ class RestrictionController extends CI_Controller
       $verifica = $this->testVehicularRestriction2($digito, $dia, $hora);
       if ($verifica)
       {
-        $result= "You can circulate the date: / Usted si puede salir el día: " . $fecha . " at: / a las: " . $hora;
+        $result = "You can circulate the date: / Usted si puede salir el día: " . $fecha . " at: / a las: " . $hora;
       }
       else
       {
-        $diano = $this->getPicoPlacaInicial($digito);
-        $result= "Remember, you can circulate on: / Recuerda, puedes circular el día: " . h_nombre_dia($diano) . " at: / a las: " . $hora;
+        $diano = h_get_pico_placa_inicial($digito);
+        $result = "Remember, you can circulate on: / Recuerda, puedes circular el día: " . h_nombre_dia($diano) . " at: / a las: " . $hora;
       }
     }
     //Due the Covid-19 pandemic, vehicular restriction changed in June 1, 2020 because yellow traffic light/ Debido a la pandemia de Covid-19, la restricción cambió el 1 de junio del 2020 por el semáforo amarillo
@@ -112,50 +115,15 @@ class RestrictionController extends CI_Controller
       $verifica = $this->testVehicularRestriction3($digito, $dia, $hora);
       if ($verifica)
       {
-        $result= "You can circulate the date: / Usted si puede salir el día: " . $fecha . " at: / a las: " . $hora;
+        $result = "You can circulate the date: / Usted si puede salir el día: " . $fecha . " at: / a las: " . $hora;
       }
       else
       {
-        $diano = $this->getPicoPlacaInicial($digito);
-        $result= "Remember, you can circulate on: / Recuerda, puedes circular el día: " . "..." . " at: / a las: " . $hora;
+        $diano = $this->getVehicularRestriction3($digito);
+        $result = "Remember, you can circulate on: / Recuerda, puedes circular los días: " . implode(", ", $diano) . " at: / a las: " . $hora;
       }
     }
-    echo json_encode(array("data"=>$result, "success"=> true));
-  }
-
-  /**
-   * @param $digito
-   * @return float|int
-   */
-  public function getPicoPlacaInicial($digito)
-  {
-    if ($digito % 2 == 0)
-    {
-      $dianum = $digito / 2;
-    }
-    else
-      $dianum = ($digito + 1) / 2;
-    return $dianum;
-  }
-
-  /**
-   * @param $placa
-   * @param $fecha
-   * @param $hora
-   */
-  public function testPicoPlacaInicial($digito, $dia, $hora)
-  {
-    $dianum = $this->getPicoPlacaInicial($digito);
-    if ($dia != $dianum)
-    {
-      if (($hora >= date('H:i', strtotime('07:00')) && $hora <= date('H:i', strtotime('09:30'))) || ($hora >= date('H:i', strtotime('16:00')) && $hora <= date('H:i', strtotime('19:30'))))
-      {
-        return false;
-      }
-      else return true;
-    }
-    else
-      return false;
+    $this->load->view('mensaje_view', array("data" => $result));
   }
 
   /**
@@ -166,8 +134,12 @@ class RestrictionController extends CI_Controller
    */
   public function testHoyNoCircula($digito, $dia, $hora)
   {
-    $dianum = $this->getPicoPlacaInicial($digito);
+    $dianum = h_get_pico_placa_inicial($digito);
     if ($dia != $dianum)
+    {
+      return true;
+    }
+    else
     {
       if ($hora >= date('H:i', strtotime('05:00')) && $hora <= date('H:i', strtotime('20:00')))
       {
@@ -175,10 +147,14 @@ class RestrictionController extends CI_Controller
       }
       else return true;
     }
-    else
-      return false;
   }
 
+  /**
+   * @param $digito
+   * @param $dia
+   * @param $hora
+   * @return bool
+   */
   public function testVehicularRestriction1($digito, $dia, $hora)
   {
     $verf = false;
@@ -218,9 +194,15 @@ class RestrictionController extends CI_Controller
     else return false;
   }
 
+  /**
+   * @param $digito
+   * @param $dia
+   * @param $hora
+   * @return bool
+   */
   public function testVehicularRestriction2($digito, $dia, $hora)
   {
-    $dianum = $this->getPicoPlacaInicial($digito);
+    $dianum = h_get_pico_placa_inicial($digito);
     if ($dia == $dianum)
     {
       if ($hora >= date('H:i', strtotime('05:00')) && $hora <= date('H:i', strtotime('14:00')))
@@ -233,10 +215,16 @@ class RestrictionController extends CI_Controller
       return false;
   }
 
+  /**
+   * @param $digito
+   * @param $dia
+   * @param $hora
+   * @return bool
+   */
   public function testVehicularRestriction3($digito, $dia, $hora)
   {
     $verf = false;
-    if ($digito%2 && $dia%2)
+    if ($digito % 2 == 0 && $dia % 2 == 0)
       return true;
     if ($verf)
     {
@@ -247,5 +235,28 @@ class RestrictionController extends CI_Controller
       else return false;
     }
     else return false;
+  }
+
+  /**
+   * @param $digito
+   * @return array
+   */
+  public function getVehicularRestriction3($digito)
+  {
+    $res = array();
+    for ($i = 0; $i < 6; $i++)
+    {
+      if ($digito % 2 == 0)
+      {
+        if ($i % 2 == 0)
+          array_push($res, h_nombre_dia($i));
+      }
+      else
+      {
+        if ($i % 2 != 0)
+          array_push($res, h_nombre_dia($i));
+      }
+    }
+    return $res;
   }
 }
