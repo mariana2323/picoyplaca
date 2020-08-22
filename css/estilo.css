@@ -3,11 +3,19 @@
 
 body {
     background-color: #fff;
-    margin: 40px;
+    margin: 0px;
     font: 13px/20px normal Helvetica, Arial, sans-serif;
     color: #4F5155;
 }
+.bodyini
+{
+    background-color: #fff;
+    margin: 0px;
+    font: 13px/20px normal Helvetica, Arial, sans-serif;
+    color: #4F5155;
+    background-image: url("../img/fondo.jpg");
 
+}
 a {
     color: #003399;
     background-color: transparent;
@@ -52,4 +60,24 @@ p.footer {
     margin: 10px;
     border: 1px solid #D0D0D0;
     box-shadow: 0 0 8px #D0D0D0;
+}
+.botonesprinc
+{
+    margin: auto;
+    width: 50%;
+    display: grid;
+}
+.textoini
+{
+    text-align: center;
+}
+.imgprinc
+{
+    height: 300px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+#forma {
+    padding: 20px;
 }
