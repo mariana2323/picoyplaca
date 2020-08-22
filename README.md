@@ -30,6 +30,7 @@ The time range was from 5:00am to 21:00pm
 Vehicles were allowed to circulate on: Monday, Wednesday, Friday: 1, 3, 5, 7, 9; Tuesday, Thursday, Saturday: 2, 4, 6, 8, 0
 
 This project was made with PHP language with CodeIgniter Framework (CI) v.3.1.11 and its structure is based on the MVC model. In CI, the inheritance concept can not be applied to Controllers, so it is required to create files known as helpers.
+An cleaning process was performed using the SonarLint tool in order to fix issues and guarantee the quality of the coding.
 
 <h3>Español</h3>
 
@@ -66,3 +67,5 @@ El rango de horario aplicaba desde las 5:00am a 21:00pm
 Los vehículos pueden circular los días: Lunes, Miércoles, Viernes: 1, 3, 5, 7, 9; Martes, Jueves, Sábado: 2, 4, 6, 8, 0
 
 El proyecto se desarrollo en lenguaje PHP con el framework CodeIgniter (CI) v3.1.11, su estructura está basada en el modelo MVC. En CI, no se puede aplicar el concepto de herencia entre controladores, por lo que es necesario crear archivos conocidos como "helpers" en dicho caso.
+Se realizó un proceso de limpieza usando la herramienta SonarLint para corregir errores y garantizar la calidad del código.
+
