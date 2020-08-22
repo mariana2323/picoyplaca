@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
     <title>Identificar si se puede salir o no con el Pico y placa dependiendo de la placa del vehículo, el día y horas
         indicados.</title>

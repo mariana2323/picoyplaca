@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
     <title>Obtener la restricción vehicular dependiendo de la fecha</title>
 </head>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
     <title>Consulta Pico y Placa</title>
 </head>
@@ -9,7 +9,7 @@
 <div class="textoini">
     <h1>PICO Y PLACA</h1>
     <h2>Restricciones vehiculares</h2>
-    <img class="imgprinc" src="<?php base_url() ?> img/principal.jpg"/>
+    <img class="imgprinc" alt="Pico y placa" src="<?php base_url() ?> img/principal.jpg"/>
 </div>
 <div class="botonesprinc">
     <p class="pestilo">Si desea averiguar si usted puede circular con su vehículo de acuerdo a las normas antiguas <br>vigentes
