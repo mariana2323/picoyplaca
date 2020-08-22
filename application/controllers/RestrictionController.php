@@ -224,11 +224,16 @@ class RestrictionController extends CI_Controller
    */
   public function testVehicularRestriction3($digito, $dia, $hora)
   {
-    $verf = false;
     if ($digito % 2 == 0 && $dia % 2 == 0)
     {
-      return true;
+      $verf = true;
     }
+    elseif ($digito % 2 != 0 && $dia % 2 != 0)
+    {
+      $verf = true;
+    }
+    else
+      $verf = false;
     if ($verf)
     {
       return ($hora >= date('H:i', strtotime('05:00')) && $hora <= date('H:i', strtotime('21:00')));
